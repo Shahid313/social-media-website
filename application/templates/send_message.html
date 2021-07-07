@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+	<title>Winku Social Network Toolkit</title>
+    <link rel="icon" href="images/fav.png" type="image/png" sizes="16x16"> 
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/color.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+
+</head>
+<body>
+<!--<div class="se-pre-con"></div>-->
+<div class="theme-layout">
+	
+	<div class="responsive-header">
+		<div class="mh-head second">
+			<form class="mh-form">
+				<input placeholder="search" />
+				<a href="#/" class="fa fa-search"></a>
+			</form>
+		</div>
+	</div><!-- responsive header -->
+	
+	<div class="topbar stick">
+		<div class="logo">
+			<a title="" href="newsfeed.html"><img src="images/logo.png" alt=""></a>
+		</div>
+		
+		<div class="top-area">
+			<ul style="margin-right: 500px;">
+				<li>
+					<a href="{{url_for('PostView:post')}}">Home</a>
+				</li>
+				<li>
+					<a href="{{url_for('PostView:messages')}}">Chat</a>
+				</li>
+				<li>
+					<a href="{{url_for('UserView:profile')}}">Profile</a>
+				</li>
+				
+			</ul>
+			<ul class="setting-area">
+				<li>
+					<a href="#" title="Home" data-ripple=""><i class="ti-search"></i></a>
+					<div class="searched">
+						<form method="post" class="form-search">
+							<input type="text" placeholder="Search Friend">
+							<button data-ripple><i class="ti-search"></i></button>
+						</form>
+					</div>
+				</li>
+				<li><a href="newsfeed.html" title="Home" data-ripple=""><i class="ti-home"></i></a></li>
+				<li>
+					<a href="#" title="Notification" data-ripple="">
+						<i class="ti-bell"></i><span></span>
+					</a>
+					<div class="dropdowns">
+						<span>Notifications</span>
+						<ul class="drops-menu">
+							{% for notification in notifications %}
+							<li>
+								<a href="notifications.html" title="">
+									<img src="images/resources/thumb-1.jpg" alt="">
+									<div class="mesg-meta">
+										{% if notification.is_like == 1 %}
+										<h6>{{notification.username}} liked your post</h6>
+										{% elif notification.is_comment == 1 %}
+										<h6>{{notification.username}} commented on your post</h6>
+										{% elif notification.is_follow == 1 %}
+										<h6>{{notification.username}} just followed you</h6>
+										{% endif %}
+									</div>
+									
+								</a>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</li>
+			</ul>
+			<div class="user-img">
+				<img src="images/resources/admin.jpg" alt="">
+				<span class="status f-online"></span>
+				<div class="user-setting">
+					<a href="#" title=""><span class="status f-online"></span>online</a>
+					<a href="#" title=""><span class="status f-away"></span>away</a>
+					<a href="#" title=""><span class="status f-off"></span>offline</a>
+					<a href="#" title=""><i class="ti-user"></i> view profile</a>
+					<a href="#" title=""><i class="ti-pencil-alt"></i>edit profile</a>
+					<a href="#" title=""><i class="ti-target"></i>activity log</a>
+					<a href="#" title=""><i class="ti-settings"></i>account setting</a>
+					<a href="#" title=""><i class="ti-power-off"></i>log out</a>
+				</div>
+			</div>
+			<span class="ti-menu main-menu" data-ripple=""></span>
+		</div>
+	</div><!-- topbar -->
+	
+
+	<section>
+		<div class="gap gray-bg">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="row" id="page-contents">
+							<div class="col-lg-3">
+								
+							</div><!-- sidebar -->
+							<div class="col-lg-6">
+								<div class="central-meta">
+									<div class="messages">
+										<h5 class="f-title"><i class="ti-bell"></i>All Messages <span class="more-options"><i class="fa fa-ellipsis-h"></i></span></h5>
+										<div class="message-box">
+											<div class="peoples-mesg-box">
+												<div class="conversation-head">
+													<figure><img src="{{url_for('static', filename='user_images/')}}{{messages.user_image}}" alt=""></figure>
+													<span>{{messages.username}} <i>online</i></span>
+												</div>
+												<ul class="chatting-area">
+													{% for message in messages %}
+
+													
+													{% if message.amISender == 1 %}
+													<li class="me">														
+														<p>{{message[0].username}}: {{message.message_body}}</p>
+													</li>
+													{% elif message.amISender == 0 %}
+													<li class="you">
+														<p>{{message.username}}: {{message.message_body}}</p>
+													</li>
+													{% endif %}
+													
+													{% endfor %}
+												</ul>
+												<div class="message-text-container">
+													<form method="post" action="{{url_for('PostView:send_message',id=users.id)}}">
+														<textarea name="message-body"></textarea>
+														<button title="send"><i class="fa fa-paper-plane"></i></button>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>	
+							</div><!-- centerl meta -->
+							<div class="col-lg-3">
+								<aside class="sidebar static">
+								</aside>
+							</div><!-- sidebar -->
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>	
+	</section>
+	<script src="{{ url_for('static', filename='js/main.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>	
+
+</html>
